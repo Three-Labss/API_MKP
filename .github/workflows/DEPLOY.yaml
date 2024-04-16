@@ -1,0 +1,36 @@
+# name: STAGING_DEPLOY
+# on:
+#   push:
+#     branches: [ "main" ]
+# jobs:
+#   build:
+#     runs-on: self-hosted
+
+#     name: Build and push to Docker Hub
+
+#     strategy:
+#       matrix:
+#         node-version: [20.x]
+#     steps:
+#       - uses: actions/checkout@v3
+#       - name: Use Node.js ${{ matrix.node-version }}
+#         uses: actions/setup-node@v3
+#         with:
+#           node-version: ${{ matrix.node-version }}
+#           cache: 'pnpm'
+
+#       - run: pm2 stop THREE
+#       - run: rm -rf .env
+#       - run: touch .env
+#       - run: |
+#           echo -e SECRET_MONGO_URI="${{ secrets.SECRET_MONGO_URI }}" >> .env
+#           echo SECRET_JWT="${{ secrets.SECRET_JWT }}" >> .env
+#           echo SECRET_JWT_SUPABASE="${{ secrets.SECRET_JWT_SUPABASE }}" >> .env
+#           echo APP_PORT="${{ secrets.APP_PORT }}" >> .env
+#           echo APP_URL="${{ secrets.APP_URL }}" >> .env
+#           echo NODE_ENV="${{ secrets.NODE_ENV }}" >> .env
+#           echo DISCORD_TOKEN="${{ secrets.DISCORD_TOKEN }}" >> .env
+
+#       - run: pnpm up
+#       - run: pnpm run build
+#       - run: pm2 start THREE
