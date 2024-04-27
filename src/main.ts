@@ -14,6 +14,7 @@ async function bootstrap() {
     credentials: true,
   });
   app.enableVersioning({
+    defaultVersion: process.env.API_VERSION.split('.')[0],
     type: VersioningType.URI,
   });
 
@@ -25,7 +26,10 @@ async function bootstrap() {
     .setTitle('MKP API')
     .setDescription('The MKP API description')
     .setVersion(process.env.API_VERSION as string)
-    .addTag('mkp')
+    .addTag(
+      'MKP',
+      'API de MKP para la gestión de pedidos y productos de la tienda online. ',
+    )
     .addSecurityRequirements('bearer')
     .addBearerAuth({
       type: 'http',
@@ -39,7 +43,7 @@ async function bootstrap() {
     .build();
 
   const document = SwaggerModule.createDocument(app, config, options);
-  SwaggerModule.setup('api', app, document);
+  SwaggerModule.setup('/', app, document);
 
   await app.listen(process.env.PORT || 4001);
 }
