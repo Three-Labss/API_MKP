@@ -13,7 +13,38 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id        String   @id @default(cuid())
-  email     String   @unique
+model Client {
+  id             String   @id @default(uuid())
+  password       String   @map("password")
+  companyEmail   String   @unique @map("company_email")
+  companyName    String   @unique @map("company_name")
+  companyCountry String   @map("company_country")
+  companyCity    String   @map("company_city")
+  companyPhone   String   @map("company_phone")
+  createdAt      DateTime @default(now()) @map("created_at")
+
+  orderEntries orderEntry[]
+
+  @@map("clients")
+}
+
+model orderEntry {
+  id          String   @id @default(uuid())
+  client      Client   @relation(fields: [clientId], references: [id])
+  clientId    String   @map("client_id")
+  channel     CHANNELS @map("channel")
+  ordersCount Int      @map("orders_count")
+  month       Int      @map("month")
+  year        Int      @map("year")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  @@map("order_entries")
+}
+
+enum CHANNELS {
+  DAFITI
+  FALABELLA
+  MERCADOLIBRE
+  LINIO
+  WEB_MAGENTO
 }
