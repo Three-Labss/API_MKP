@@ -184,7 +184,6 @@ prisma/migrations
 
 #Docker
 docker-compose.override.yml
-compose.yaml
 
 # PostgreeSQL
 *.sql
