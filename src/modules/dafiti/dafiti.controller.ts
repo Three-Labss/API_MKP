@@ -6,6 +6,7 @@ import { DafitiService } from './dafiti.service';
 import { DafitiAuth } from './decorators/dafiti-auth.decorator';
 
 @ApiTags('Dafiti')
+@ApiTags('Orders')
 @UseGuards(JwtClientGuard)
 @Controller('dafiti')
 export class DafitiController {
@@ -20,6 +21,11 @@ export class DafitiController {
   @ApiResponse({
     status: 401,
     description: RESPONSES.UNAUTHORIZED,
+    links: {},
+  })
+  @ApiResponse({
+    status: 404,
+    description: RESPONSES.NOT_FOUND,
     links: {},
   })
   @ApiResponse({
@@ -40,6 +46,11 @@ export class DafitiController {
   @ApiResponse({
     status: 401,
     description: RESPONSES.UNAUTHORIZED,
+    links: {},
+  })
+  @ApiResponse({
+    status: 404,
+    description: RESPONSES.NOT_FOUND,
     links: {},
   })
   @ApiResponse({
@@ -72,6 +83,36 @@ export class DafitiController {
     links: {},
   })
   @ApiResponse({
+    status: 404,
+    description: RESPONSES.NOT_FOUND,
+    links: {},
+  })
+  @ApiResponse({
+    status: 408,
+    description: RESPONSES.LIMIT,
+    links: {},
+  })
+  @Post('orders/ready-to-ship')
+  async setOrdersReadyToShip(@DafitiAuth() token: string = '') {
+    return await this.dafitiService.setOrdersReadyToShip({ token });
+  }
+
+  @ApiResponse({
+    status: 200,
+    description: RESPONSES.SUCCESS,
+    links: {},
+  })
+  @ApiResponse({
+    status: 401,
+    description: RESPONSES.UNAUTHORIZED,
+    links: {},
+  })
+  @ApiResponse({
+    status: 404,
+    description: RESPONSES.NOT_FOUND,
+    links: {},
+  })
+  @ApiResponse({
     status: 408,
     description: RESPONSES.LIMIT,
     links: {},
@@ -101,23 +142,8 @@ export class DafitiController {
     links: {},
   })
   @ApiResponse({
-    status: 408,
-    description: RESPONSES.LIMIT,
-    links: {},
-  })
-  @Post('orders/ready-to-ship')
-  async setOrdersReadyToShip(@DafitiAuth() token: string = '') {
-    return await this.dafitiService.setOrdersReadyToShip({ token });
-  }
-
-  @ApiResponse({
-    status: 200,
-    description: RESPONSES.SUCCESS,
-    links: {},
-  })
-  @ApiResponse({
-    status: 401,
-    description: RESPONSES.UNAUTHORIZED,
+    status: 404,
+    description: RESPONSES.NOT_FOUND,
     links: {},
   })
   @ApiResponse({
@@ -147,6 +173,11 @@ export class DafitiController {
   @ApiResponse({
     status: 401,
     description: RESPONSES.UNAUTHORIZED,
+    links: {},
+  })
+  @ApiResponse({
+    status: 404,
+    description: RESPONSES.NOT_FOUND,
     links: {},
   })
   @ApiResponse({
@@ -200,25 +231,5 @@ export class DafitiController {
     @Param('id') id: number = 12345,
   ) {
     return await this.dafitiService.orderById({ token, id });
-  }
-
-  @ApiResponse({
-    status: 200,
-    description: RESPONSES.SUCCESS,
-    links: {},
-  })
-  @ApiResponse({
-    status: 401,
-    description: RESPONSES.UNAUTHORIZED,
-    links: {},
-  })
-  @ApiResponse({
-    status: 408,
-    description: RESPONSES.LIMIT,
-    links: {},
-  })
-  @Get('orders/faliure-reasones')
-  async getOrdersFailureReasones(@DafitiAuth() token: string = '') {
-    return await this.dafitiService.ordersFailureReasones({ token });
   }
 }
