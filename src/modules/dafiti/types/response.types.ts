@@ -4,6 +4,17 @@ export type RequestResponse = {
   limit?: string;
   status?: STATUS_ENUM | string;
   uuid?: string;
+  pickup?: PickUpT;
+};
+
+type PickUpT = {
+  orderItems: OrderItemsT[];
+  deliveryType?: string;
+  shippingProvider?: string;
+};
+
+export type OrderItemsT = {
+  id: number;
 };
 
 enum STATUS_ENUM {
