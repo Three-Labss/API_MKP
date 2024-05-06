@@ -7,7 +7,7 @@ export type RequestResponse = {
   pickup?: PickUpT;
 };
 
-type PickUpT = {
+export type PickUpT = {
   orderItems: OrderItemsT[];
   deliveryType?: string;
   shippingProvider?: string;
