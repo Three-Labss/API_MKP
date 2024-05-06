@@ -1,9 +1,24 @@
-import { Controller, Get, Param, Post, Query, UseGuards } from '@nestjs/common';
-import { ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
+import {
+  ApiBody,
+  ApiParam,
+  ApiQuery,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { JwtClientGuard } from 'src/configs/auth/guards/client.guard';
 import { RESPONSES } from './constants';
 import { DafitiService } from './dafiti.service';
 import { DafitiAuth } from './decorators/dafiti-auth.decorator';
+import { PickUpT } from './types/response.types';
 
 @ApiTags('Dafiti')
 @ApiTags('Orders')
@@ -92,9 +107,32 @@ export class DafitiController {
     description: RESPONSES.LIMIT,
     links: {},
   })
+  @ApiBody({
+    type: Object,
+    description: 'La orden a cambiar de estado a lista para enviar',
+    examples: {
+      pickup: {
+        value: {
+          orderItems: [
+            {
+              id: 12345,
+            },
+            {
+              id: 54321,
+            },
+          ],
+          deliveryType: 'pickup',
+          shippingProvider: 'Dafiti carrier',
+        },
+      },
+    },
+  })
   @Post('orders/ready-to-ship')
-  async setOrdersReadyToShip(@DafitiAuth() token: string = '') {
-    return await this.dafitiService.setOrdersReadyToShip({ token });
+  async setOrdersReadyToShip(
+    @DafitiAuth() token: string = '',
+    @Body() pickup: PickUpT,
+  ) {
+    return await this.dafitiService.setOrdersReadyToShip({ token, pickup });
   }
 
   @ApiResponse({
