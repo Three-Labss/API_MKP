@@ -1,12 +1,12 @@
 name: STAGING_DEPLOY
 on:
   push:
-    branches: [ "main" ]
+    branches: ['main']
 jobs:
   build:
     runs-on: self-hosted
 
-    name:  Deploy to Staging Server MKP API
+    name: Deploy to Staging Server MKP API
 
     strategy:
       matrix:
@@ -19,32 +19,31 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: 'pnpm'
 
-
       - run: pm2 stop MKP
       - run: pnpm store prune
       - run: rm -rf .env
       - run: touch .env
       - run: |
-           echo PORT="${{ vars.PORT }}" >> .env
-           echo API_VERSION="${{ vars.API_VERSION }}" >> .env
-           echo DB_PORT="${{ secrets.DB_PORT }}" >> .env
-           echo DB_CONNECTION="${{ secrets.DB_CONNECTION }}" >> .env
-           echo DB_USERNAME="${{ secrets.DB_USERNAME }}" >> .env
-           echo DB_PASSWORD="${{ secrets.DB_PASSWORD }}" >> .env
-           echo DB_HOST="${{ secrets.DB_HOST }}" >> .env
-           echo DB_DATABASE="${{ secrets.DB_DATABASE }}" >> .env
-           echo DATABASE_URL="${{ secrets.DATABASE_URL }}" >> .env
-           echo JWT_SECRET="${{ secrets.JWT_SECRET }}" >> .env
-           echo JWT_EXPIRES_IN="${{ secrets.JWT_EXPIRES_IN }}" >> .env
-           echo DAFITI_HOST="${{ vars.DAFITI_HOST }}" >> .env
-           echo DAFITI_HOST_API="${{ vars.DAFITI_HOST_API }}" >> .env
-           echo DAFITI_INSTANCE="${{ vars.DAFITI_INSTANCE }}" >> .env
-           echo DAFITI_VERSION="${{ vars.DAFITI_VERSION }}" >> .env
-           echo DAFITI_USER_APP_ID="${{ secrets.DAFITI_USER_APP_ID }}" >> .env
-           echo DAFITI_USER_APP_SECRET="${{ secrets.DAFITI_USER_APP_SECRET }}" >> .env
-           echo DAFITI_URL="${{ vars.DAFITI_URL }}" >> .env
-           echo DAFITI_URL_API_V1="${{ vars.DAFITI_URL_API_V1 }}" >> .env
-           echo DAFITI_URL_API="${{ vars.DAFITI_URL_API }}" >> .env
+          echo PORT="${{ vars.PORT }}" >> .env
+          echo API_VERSION="${{ vars.API_VERSION }}" >> .env
+          echo DB_PORT="${{ secrets.DB_PORT }}" >> .env
+          echo DB_CONNECTION="${{ secrets.DB_CONNECTION }}" >> .env
+          echo DB_USERNAME="${{ secrets.DB_USERNAME }}" >> .env
+          echo DB_PASSWORD="${{ secrets.DB_PASSWORD }}" >> .env
+          echo DB_HOST="${{ secrets.DB_HOST }}" >> .env
+          echo DB_DATABASE="${{ secrets.DB_DATABASE }}" >> .env
+          echo DATABASE_URL="${{ secrets.DB_CONNECTION }}://${{ secrets.DB_USERNAME}}:${{ secrets.DB_PASSWORD }}@${{ secrets.DB_HOST }}:${{ secrets.DB_PORT }}/${{ secrets.DB_DATABASE }}" >> .env
+          echo JWT_SECRET="${{ secrets.JWT_SECRET }}" >> .env
+          echo JWT_EXPIRES_IN="${{ secrets.JWT_EXPIRES_IN }}" >> .env
+          echo DAFITI_HOST="${{ vars.DAFITI_HOST }}" >> .env
+          echo DAFITI_HOST_API="${{ vars.DAFITI_HOST_API }}" >> .env
+          echo DAFITI_INSTANCE="${{ vars.DAFITI_INSTANCE }}" >> .env
+          echo DAFITI_VERSION="${{ vars.DAFITI_VERSION }}" >> .env
+          echo DAFITI_USER_APP_ID="${{ secrets.DAFITI_USER_APP_ID }}" >> .env
+          echo DAFITI_USER_APP_SECRET="${{ secrets.DAFITI_USER_APP_SECRET }}" >> .env
+          echo DAFITI_URL="https://${{ vars.DAFITI_HOST }}.${{ vars.DAFITI_INSTANCE }}" >> .env
+          echo DAFITI_URL_API_V1="https://${{ vars.DAFITI_HOST_API }}.${{ vars.DAFITI_INSTANCE }}" >> .env
+          echo DAFITI_URL_API="https://${{ vars.DAFITI_HOST_API }}.${{ vars.DAFITI_INSTANCE }}/${{ vars.DAFITI_VERSION }}" >> .env
 
       - run: pnpm up
       - run: npx prisma db push
