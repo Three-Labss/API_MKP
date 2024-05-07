@@ -1,5 +1,8 @@
+import { Client } from '@prisma/client';
+
 export type RequestResponse = {
   token: string;
+  client: Client;
   id?: number;
   limit?: string;
   status?: STATUS_ENUM | string;
