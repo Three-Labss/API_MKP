@@ -10,4 +10,4 @@ services:
     ports:
       - '${DB_PORT}:5432'
     volumes:
-      - ~/home/kevnnard/projects/API_MKP/API_MKP/postgres_data:/var/lib/postgresql/data
+      - ~/home/kevnnard/databases/API_MKP/postgres_data:/var/lib/postgresql/data
