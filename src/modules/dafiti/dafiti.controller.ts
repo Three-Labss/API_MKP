@@ -14,6 +14,8 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
+import { Client } from '@prisma/client';
+import { CurrentClient } from 'src/configs/auth/decorators/client.decorator';
 import { JwtClientGuard } from 'src/configs/auth/guards/client.guard';
 import { RESPONSES } from './constants';
 import { DafitiService } from './dafiti.service';
@@ -49,8 +51,11 @@ export class DafitiController {
     links: {},
   })
   @Get('orders/counters')
-  async getAllOrdersCounters(@DafitiAuth() token: string = '') {
-    return await this.dafitiService.ordersCounters({ token });
+  async getAllOrdersCounters(
+    @DafitiAuth() token: string = '',
+    @CurrentClient() client: Client,
+  ) {
+    return await this.dafitiService.ordersCounters({ token, client });
   }
 
   @ApiResponse({
@@ -82,9 +87,10 @@ export class DafitiController {
   @Get('orders/pending')
   async getAllOrdersPending(
     @DafitiAuth() token: string = '',
+    @CurrentClient() client: Client,
     @Query('limit') limit: string = '10',
   ) {
-    return await this.dafitiService.ordersPending({ token, limit });
+    return await this.dafitiService.ordersPending({ token, client, limit });
   }
 
   @ApiResponse({
@@ -130,9 +136,14 @@ export class DafitiController {
   @Post('orders/ready-to-ship')
   async setOrdersReadyToShip(
     @DafitiAuth() token: string = '',
+    @CurrentClient() client: Client,
     @Body() pickup: PickUpT,
   ) {
-    return await this.dafitiService.setOrdersReadyToShip({ token, pickup });
+    return await this.dafitiService.setOrdersReadyToShip({
+      token,
+      client,
+      pickup,
+    });
   }
 
   @ApiResponse({
@@ -164,9 +175,10 @@ export class DafitiController {
   @Get('orders/ready-to-ship')
   async getAllOrdersReadyToShip(
     @DafitiAuth() token: string = '',
+    @CurrentClient() client: Client,
     @Query('limit') limit: string = '10',
   ) {
-    return await this.dafitiService.ordersReadyToShip({ token, limit });
+    return await this.dafitiService.ordersReadyToShip({ token, client, limit });
   }
 
   @ApiResponse({
@@ -198,9 +210,10 @@ export class DafitiController {
   @Get('orders/shipped')
   async getAllOrdersShipped(
     @DafitiAuth() token: string = '',
+    @CurrentClient() client: Client,
     @Query('limit') limit: string = '10',
   ) {
-    return await this.dafitiService.ordersShipped({ token, limit });
+    return await this.dafitiService.ordersShipped({ token, client, limit });
   }
 
   @ApiResponse({
@@ -232,9 +245,10 @@ export class DafitiController {
   @Get('orders/delivered')
   async getAllOrdersDelivered(
     @DafitiAuth() token: string = '',
+    @CurrentClient() client: Client,
     @Query('limit') limit: string = '10',
   ) {
-    return await this.dafitiService.ordersDelivered({ token, limit });
+    return await this.dafitiService.ordersDelivered({ token, client, limit });
   }
 
   @ApiResponse({
@@ -266,8 +280,9 @@ export class DafitiController {
   @Get('orders/:id')
   async getOrderById(
     @DafitiAuth() token: string = '',
+    @CurrentClient() client: Client,
     @Param('id') id: number = 12345,
   ) {
-    return await this.dafitiService.orderById({ token, id });
+    return await this.dafitiService.orderById({ token, client, id });
   }
 }
