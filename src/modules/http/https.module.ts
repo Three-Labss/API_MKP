@@ -1,8 +1,9 @@
 import { HttpModule } from '@nestjs/axios';
-import { Module } from '@nestjs/common';
+import { Global, Module } from '@nestjs/common';
 import { HttpsController } from './https.controller';
 import { HttpsService } from './https.service';
 
+@Global()
 @Module({
   imports: [
     HttpModule.registerAsync({
