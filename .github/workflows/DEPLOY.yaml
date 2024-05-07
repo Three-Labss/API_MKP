@@ -47,7 +47,7 @@ jobs:
            echo DAFITI_URL_API="${{ vars.DAFITI_URL_API }}" >> .env
 
       - run: pnpm up
-      - run: npx prisma migrate deploy
+      - run: npx prisma db push
 
       - run: pnpm run build
       - run: pm2 start MKP
