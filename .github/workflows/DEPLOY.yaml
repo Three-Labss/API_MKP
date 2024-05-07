@@ -5,7 +5,7 @@ on:
 jobs:
   build:
     runs-on: self-hosted
-
+    
     name: Build and push to Docker Hub
 
     strategy:
@@ -22,15 +22,7 @@ jobs:
       - run: pm2 stop MKP
       - run: rm -rf .env
       - run: touch .env
-     #  - run: |
-     #      echo -e SECRET_MONGO_URI="${{ secrets.SECRET_MONGO_URI }}" >> .env
-     #      echo SECRET_JWT="${{ secrets.SECRET_JWT }}" >> .env
-     #      echo SECRET_JWT_SUPABASE="${{ secrets.SECRET_JWT_SUPABASE }}" >> .env
-     #      echo APP_PORT="${{ secrets.APP_PORT }}" >> .env
-     #      echo APP_URL="${{ secrets.APP_URL }}" >> .env
-     #      echo NODE_ENV="${{ secrets.NODE_ENV }}" >> .env
-     #      echo DISCORD_TOKEN="${{ secrets.DISCORD_TOKEN }}" >> .env
-
+          
       - run: pnpm up
       - run: pnpm run build
-      - run: pm2 start MKP
+      - run: pm2 start THREE
