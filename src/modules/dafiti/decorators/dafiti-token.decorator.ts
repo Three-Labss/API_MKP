@@ -2,7 +2,7 @@ import { createParamDecorator, UnauthorizedException } from '@nestjs/common';
 import axios from 'axios';
 import { DAFITI, RESPONSES } from '../constants';
 
-export const DafitiAuth = createParamDecorator(async (_, __) => {
+export const DafitiToken = createParamDecorator(async () => {
   let data = new FormData();
   data.append('grant_type', 'client_credentials');
 
