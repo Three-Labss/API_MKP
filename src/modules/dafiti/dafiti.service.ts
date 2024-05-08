@@ -1,13 +1,21 @@
 import { Injectable, RequestTimeoutException } from '@nestjs/common';
+import { CHANNELS } from '@prisma/client';
 import { HttpsService } from '../http/https.service';
+import { OrderEntryService } from '../orderEntry/orderEntry.service';
 import { DAFITI, RESPONSES } from './constants';
 import { RequestResponse } from './types/response.types';
 
 @Injectable()
 export class DafitiService {
-  constructor(private readonly httpsService: HttpsService) {}
+  private readonly channel = CHANNELS.DAFITI;
+  constructor(
+    private readonly httpsService: HttpsService,
+    private readonly orderEntryService: OrderEntryService,
+  ) {}
 
-  async ordersCounters({ token }: RequestResponse) {
+  async ordersCounters({ token, client }: RequestResponse) {
+    await this.orderEntryService.getOrderEntryById(client.id, this.channel);
+
     return await this.httpsService.getHttps({
       method: 'GET',
       url: `${DAFITI.URL_API}/orders-counters`,
@@ -15,8 +23,10 @@ export class DafitiService {
     });
   }
 
-  async ordersPending({ token, limit }: RequestResponse) {
+  async ordersPending({ token, client, limit }: RequestResponse) {
     if (Number(limit) > 50) throw new RequestTimeoutException(RESPONSES.LIMIT);
+
+    await this.orderEntryService.getOrderEntryById(client.id, this.channel);
 
     return await this.httpsService.getHttps({
       method: 'GET',
@@ -25,7 +35,9 @@ export class DafitiService {
     });
   }
 
-  async setOrdersReadyToShip({ token, pickup }: RequestResponse) {
+  async setOrdersReadyToShip({ token, client, pickup }: RequestResponse) {
+    await this.orderEntryService.getOrderEntryById(client.id, this.channel);
+
     return await this.httpsService.postHttps({
       method: 'POST',
       url: `${DAFITI.URL_API}/orders/statuses/set-to-ready-to-ship`,
@@ -34,8 +46,10 @@ export class DafitiService {
     });
   }
 
-  async ordersReadyToShip({ token, limit }: RequestResponse) {
+  async ordersReadyToShip({ token, client, limit }: RequestResponse) {
     if (Number(limit) > 50) throw new RequestTimeoutException(RESPONSES.LIMIT);
+
+    await this.orderEntryService.getOrderEntryById(client.id, this.channel);
 
     return await this.httpsService.getHttps({
       method: 'GET',
@@ -44,8 +58,10 @@ export class DafitiService {
     });
   }
 
-  async ordersShipped({ token, limit }: RequestResponse) {
+  async ordersShipped({ token, client, limit }: RequestResponse) {
     if (Number(limit) > 50) throw new RequestTimeoutException(RESPONSES.LIMIT);
+
+    await this.orderEntryService.getOrderEntryById(client.id, this.channel);
 
     return await this.httpsService.getHttps({
       method: 'GET',
@@ -54,8 +70,10 @@ export class DafitiService {
     });
   }
 
-  async ordersDelivered({ token, limit }: RequestResponse) {
+  async ordersDelivered({ token, client, limit }: RequestResponse) {
     if (Number(limit) > 50) throw new RequestTimeoutException(RESPONSES.LIMIT);
+
+    await this.orderEntryService.getOrderEntryById(client.id, this.channel);
 
     return await this.httpsService.getHttps({
       method: 'GET',
@@ -64,7 +82,8 @@ export class DafitiService {
     });
   }
 
-  async orderById({ token, id }: RequestResponse) {
+  async orderById({ token, client, id }: RequestResponse) {
+    await this.orderEntryService.getOrderEntryById(client.id, this.channel);
     return await this.httpsService.getHttps({
       method: 'GET',
       url: `${DAFITI.URL_API}/orders/${id}`,

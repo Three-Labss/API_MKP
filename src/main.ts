@@ -23,8 +23,10 @@ async function bootstrap() {
   };
 
   const config = new DocumentBuilder()
-    .setTitle('MKP API')
-    .setDescription('The MKP API description')
+    .setTitle('THREE TRACKR API')
+    .setDescription(
+      'API de Three Trackr para la gestión de pedidos y productos de la tienda online. ',
+    )
     .setVersion(process.env.API_VERSION as string)
     .addTag(
       'MKP',
@@ -36,9 +38,17 @@ async function bootstrap() {
       scheme: 'bearer',
       bearerFormat: 'JWT',
     })
-    .setTermsOfService('https://example.com/')
-    .setLicense('LICENSIA NO COMERCIAL Y PRIVADA', 'https://example.com/')
-    .setContact('Contacto', 'https://example.com/', 'kevnnard.films@gmail.com')
+    .setTermsOfService('/app/terms')
+    .setExternalDoc(
+      'Documentación',
+      'https://challengetrackr.com/es/docs/threetrackr',
+    )
+    .setLicense('LICENCIA NO COMERCIAL Y PRIVADA', '/app/politicas')
+    .setContact(
+      'Contacto a Soporte',
+      'https://challengetrackr.com/es/sopporte',
+      'soporte@threetrackr.com',
+    )
 
     .build();
 

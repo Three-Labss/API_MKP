@@ -7,77 +7,33 @@ import {
   Query,
   UseGuards,
 } from '@nestjs/common';
-import {
-  ApiBody,
-  ApiParam,
-  ApiQuery,
-  ApiResponse,
-  ApiTags,
-} from '@nestjs/swagger';
+import { ApiBody, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { Client } from '@prisma/client';
 import { CurrentClient } from 'src/configs/auth/decorators/client.decorator';
 import { JwtClientGuard } from 'src/configs/auth/guards/client.guard';
-import { RESPONSES } from './constants';
 import { DafitiService } from './dafiti.service';
-import { DafitiAuth } from './decorators/dafiti-auth.decorator';
+import { ApiResponses } from './decorators/api-responses-apply.decorator';
+import { DafitiToken } from './decorators/dafiti-token.decorator';
 import { PickUpT } from './types/response.types';
 
-@ApiTags('Dafiti')
-@ApiTags('Orders')
 @UseGuards(JwtClientGuard)
+@ApiResponses()
+@ApiTags('Dafiti / Orders')
 @Controller('dafiti')
 export class DafitiController {
   constructor(private readonly dafitiService: DafitiService) {}
 
-  @ApiResponse({
-    status: 200,
-    description: RESPONSES.SUCCESS,
-    links: {},
-    isArray: true,
-  })
-  @ApiResponse({
-    status: 401,
-    description: RESPONSES.UNAUTHORIZED,
-    links: {},
-  })
-  @ApiResponse({
-    status: 404,
-    description: RESPONSES.NOT_FOUND,
-    links: {},
-  })
-  @ApiResponse({
-    status: 408,
-    description: RESPONSES.LIMIT,
-    links: {},
-  })
   @Get('orders/counters')
   async getAllOrdersCounters(
-    @DafitiAuth() token: string = '',
+    @DafitiToken() token: string = '',
     @CurrentClient() client: Client,
   ) {
-    return await this.dafitiService.ordersCounters({ token, client });
+    return await this.dafitiService.ordersCounters({
+      token,
+      client,
+    });
   }
 
-  @ApiResponse({
-    status: 200,
-    description: RESPONSES.SUCCESS,
-    links: {},
-  })
-  @ApiResponse({
-    status: 401,
-    description: RESPONSES.UNAUTHORIZED,
-    links: {},
-  })
-  @ApiResponse({
-    status: 404,
-    description: RESPONSES.NOT_FOUND,
-    links: {},
-  })
-  @ApiResponse({
-    status: 408,
-    description: RESPONSES.LIMIT,
-    links: {},
-  })
   @ApiQuery({
     name: 'limit',
     type: 'string',
@@ -86,33 +42,17 @@ export class DafitiController {
   })
   @Get('orders/pending')
   async getAllOrdersPending(
-    @DafitiAuth() token: string = '',
+    @DafitiToken() token: string = '',
     @CurrentClient() client: Client,
     @Query('limit') limit: string = '10',
   ) {
-    return await this.dafitiService.ordersPending({ token, client, limit });
+    return await this.dafitiService.ordersPending({
+      token,
+      client,
+      limit,
+    });
   }
 
-  @ApiResponse({
-    status: 200,
-    description: RESPONSES.SUCCESS,
-    links: {},
-  })
-  @ApiResponse({
-    status: 401,
-    description: RESPONSES.UNAUTHORIZED,
-    links: {},
-  })
-  @ApiResponse({
-    status: 404,
-    description: RESPONSES.NOT_FOUND,
-    links: {},
-  })
-  @ApiResponse({
-    status: 408,
-    description: RESPONSES.LIMIT,
-    links: {},
-  })
   @ApiBody({
     type: Object,
     description: 'La orden a cambiar de estado a lista para enviar',
@@ -135,7 +75,7 @@ export class DafitiController {
   })
   @Post('orders/ready-to-ship')
   async setOrdersReadyToShip(
-    @DafitiAuth() token: string = '',
+    @DafitiToken() token: string = '',
     @CurrentClient() client: Client,
     @Body() pickup: PickUpT,
   ) {
@@ -146,61 +86,19 @@ export class DafitiController {
     });
   }
 
-  @ApiResponse({
-    status: 200,
-    description: RESPONSES.SUCCESS,
-    links: {},
-  })
-  @ApiResponse({
-    status: 401,
-    description: RESPONSES.UNAUTHORIZED,
-    links: {},
-  })
-  @ApiResponse({
-    status: 404,
-    description: RESPONSES.NOT_FOUND,
-    links: {},
-  })
-  @ApiResponse({
-    status: 408,
-    description: RESPONSES.LIMIT,
-    links: {},
-  })
-  @ApiQuery({
-    name: 'limit',
-    type: 'string',
-    description: 'El limite maximo de ordenes',
-    example: '10',
-  })
   @Get('orders/ready-to-ship')
   async getAllOrdersReadyToShip(
-    @DafitiAuth() token: string = '',
+    @DafitiToken() token: string = '',
     @CurrentClient() client: Client,
     @Query('limit') limit: string = '10',
   ) {
-    return await this.dafitiService.ordersReadyToShip({ token, client, limit });
+    return await this.dafitiService.ordersReadyToShip({
+      token,
+      client,
+      limit,
+    });
   }
 
-  @ApiResponse({
-    status: 200,
-    description: RESPONSES.SUCCESS,
-    links: {},
-  })
-  @ApiResponse({
-    status: 401,
-    description: RESPONSES.UNAUTHORIZED,
-    links: {},
-  })
-  @ApiResponse({
-    status: 404,
-    description: RESPONSES.NOT_FOUND,
-    links: {},
-  })
-  @ApiResponse({
-    status: 408,
-    description: RESPONSES.LIMIT,
-    links: {},
-  })
   @ApiQuery({
     name: 'limit',
     type: 'string',
@@ -209,33 +107,17 @@ export class DafitiController {
   })
   @Get('orders/shipped')
   async getAllOrdersShipped(
-    @DafitiAuth() token: string = '',
+    @DafitiToken() token: string = '',
     @CurrentClient() client: Client,
     @Query('limit') limit: string = '10',
   ) {
-    return await this.dafitiService.ordersShipped({ token, client, limit });
+    return await this.dafitiService.ordersShipped({
+      token,
+      client,
+      limit,
+    });
   }
 
-  @ApiResponse({
-    status: 200,
-    description: RESPONSES.SUCCESS,
-    links: {},
-  })
-  @ApiResponse({
-    status: 401,
-    description: RESPONSES.UNAUTHORIZED,
-    links: {},
-  })
-  @ApiResponse({
-    status: 404,
-    description: RESPONSES.NOT_FOUND,
-    links: {},
-  })
-  @ApiResponse({
-    status: 408,
-    description: RESPONSES.LIMIT,
-    links: {},
-  })
   @ApiQuery({
     name: 'limit',
     type: 'string',
@@ -244,33 +126,17 @@ export class DafitiController {
   })
   @Get('orders/delivered')
   async getAllOrdersDelivered(
-    @DafitiAuth() token: string = '',
+    @DafitiToken() token: string = '',
     @CurrentClient() client: Client,
     @Query('limit') limit: string = '10',
   ) {
-    return await this.dafitiService.ordersDelivered({ token, client, limit });
+    return await this.dafitiService.ordersDelivered({
+      token,
+      client,
+      limit,
+    });
   }
 
-  @ApiResponse({
-    status: 200,
-    description: RESPONSES.SUCCESS,
-    links: {},
-  })
-  @ApiResponse({
-    status: 401,
-    description: RESPONSES.UNAUTHORIZED,
-    links: {},
-  })
-  @ApiResponse({
-    status: 404,
-    description: RESPONSES.NOT_FOUND,
-    links: {},
-  })
-  @ApiResponse({
-    status: 408,
-    description: RESPONSES.LIMIT,
-    links: {},
-  })
   @ApiParam({
     name: 'id',
     type: 'number',
@@ -279,10 +145,14 @@ export class DafitiController {
   })
   @Get('orders/:id')
   async getOrderById(
-    @DafitiAuth() token: string = '',
+    @DafitiToken() token: string = '',
     @CurrentClient() client: Client,
     @Param('id') id: number = 12345,
   ) {
-    return await this.dafitiService.orderById({ token, client, id });
+    return await this.dafitiService.orderById({
+      token,
+      client,
+      id,
+    });
   }
 }

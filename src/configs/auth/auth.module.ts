@@ -3,7 +3,6 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { ClientModule } from 'src/modules/client/client.module';
-import { PrismaModule } from '../db/prisma.module';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { JwtClientStrategy } from './strategies/client.strategy';
@@ -20,7 +19,6 @@ import { JwtClientStrategy } from './strategies/client.strategy';
         signOptions: { expiresIn: configService.get('JWT_EXPIRES_IN') },
       }),
     }),
-    PrismaModule,
     ClientModule,
   ],
   controllers: [AuthController],
