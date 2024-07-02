@@ -8,7 +8,7 @@ export class OrderEntryService {
   private presentMonth: number;
   private presentYear: number;
   constructor(private readonly prismaService: PrismaService) {
-    this.presentMonth = new Date().getMonth();
+    this.presentMonth = new Date().getMonth() + 1;
     this.presentYear = new Date().getFullYear();
   }
 

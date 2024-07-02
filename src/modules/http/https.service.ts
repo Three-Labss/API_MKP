@@ -30,6 +30,7 @@ export class HttpsService {
       maxBodyLength: Infinity,
       headers: {
         accept: 'application/json',
+        contentType: 'application/json',
         'X-Context': 'seller',
         Authorization: `Bearer ${httpBody.token}`,
       },
@@ -37,6 +38,27 @@ export class HttpsService {
 
     return await this.httpService.axiosRef
       .post(httpBody.url, httpBody.data, config)
+      .then((response) => {
+        return response.data;
+      })
+      .catch((error) => {
+        throw new BadRequestException(error);
+      });
+  }
+
+  async putHttps(httpBody: HttpBodyTypes) {
+    const config = {
+      maxBodyLength: Infinity,
+      headers: {
+        accept: 'application/json',
+        contentType: 'application/json',
+        'X-Context': 'seller',
+        Authorization: `Bearer ${httpBody.token}`,
+      },
+    };
+
+    return await this.httpService.axiosRef
+      .put(httpBody.url, httpBody.data, config)
       .then((response) => {
         return response.data;
       })
