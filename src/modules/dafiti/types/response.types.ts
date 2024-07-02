@@ -8,6 +8,14 @@ export type RequestResponse = {
   status?: STATUS_ENUM | string;
   uuid?: string;
   pickup?: PickUpT;
+  products?: string[];
+  sellerSku?: string;
+  stock?: StockT[];
+};
+
+export type StockT = {
+  productId: number;
+  quantity: number;
 };
 
 export type PickUpT = {
